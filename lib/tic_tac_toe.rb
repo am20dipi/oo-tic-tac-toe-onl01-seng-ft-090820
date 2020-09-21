@@ -49,26 +49,24 @@ WIN_COMBINATIONS = [
     return turn #returns the number of turns
   end
   
-  def current_player #if the turn count is an even number, that means O just went.
-    number_turns = turn_count
-    if number_turns % 2 == 0 #if number of turn is divisible by 2, then its player X turn
-      current_player = "X"
+  def current_player
+    if turn_count % 2 == 0
+      "X"
     else
-      current_player = "O"
+      "O"
     end
-    return current_player
   end
   
   def turn
     puts "Please choose a number 1-9" #asking for input
-    user_input = gets.strip #getting the input
+    user_input = gets.strip #getting the input, .strip removes white space
     index = input_to_index(user_input) #translate input into an index
     cp = current_player
     if valid_move?(index)
       move(index, cp)
       display_board
     else
-      turn
+      turn #calling the method recursively (when a method calls itself)
     end
   end
   
@@ -81,7 +79,7 @@ WIN_COMBINATIONS = [
     end
       false
   end
-end
+
   
   def full?
     @board.all? {|index| index == "X" || index == "O"}
@@ -96,21 +94,21 @@ end
   end
   
   def winner
-  WIN_COMBINATIONS.detect do |win_combo|
-    if (@board[win_combo[0]]) == "X" && (@board[win_combo[1]]) == "X" && (@board[win_combo[2]]) == "X"
-      return "X"
-    elsif (@board[win_combo[0]]) == "O" && (@board[win_combo[1]]) == "O" && (@board[win_combo[2]]) == "O"
-      return "O"
-    else
-      nil
+    WIN_COMBINATIONS.detect do |win_combo|
+      if (@board[win_combo[0]]) == "X" && (@board[win_combo[1]]) == "X" && (@board[win_combo[2]]) == "X"
+        return "X"
+      elsif (@board[win_combo[0]]) == "O" && (@board[win_combo[1]]) == "O" && (@board[win_combo[2]]) == "O"
+        return "O"
+      else
+        nil
+      end
     end
   end
-end
+
   
   def play
     until over? || draw? || won? == true
       turn
-    end
     if won?
       puts "Congratulations #{winner}!"
     elsif draw?
@@ -118,11 +116,6 @@ end
     else
       false
     end
+    play
   end
-  
 end
-
-
-
-
-TicTacToe.new #creating a new instance of the TicTacToe Class; .new is a class method that you get just from making the Class 
